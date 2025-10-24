@@ -21,8 +21,18 @@ const GameBoard = (function (){
         }
     }
     
-    return {getBoard, placePiece, resetBoard}
+    return {getBoard, placePiece, resetBoard};
 }());
 
+//factory function for player:
+const Player = function(player_symbol){
+    const getInput = () => {
+        let user_input = prompt('Enter an index:');
+        user_input = user_input.split(',');
 
+        GameBoard.placePiece(user_input[0], user_input[1], player_symbol);
 
+    };
+
+    return {player_symbol, getInput};
+};
