@@ -24,8 +24,9 @@ const GameBoard = (function (){
     return {getBoard, placePiece, resetBoard};
 }());
 
+
 //factory function for player:
-const Player = function(player_symbol){
+const createPlayer = function(player_symbol){
     const getInput = () => {
         let user_input = prompt('Enter an index:');
         user_input = user_input.split(',');
@@ -36,3 +37,14 @@ const Player = function(player_symbol){
 
     return {player_symbol, getInput};
 };
+
+//these use Player as their prototype:
+const Player_x = (function() {
+    const {player_symbol, getInput} = createPlayer('X');
+    return {player_symbol, getInput};
+}());
+
+const Player_y = (function() {
+    const {player_symbol, getInput} = createPlayer('y');
+    return {player_symbol, getInput};
+}());
