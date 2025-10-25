@@ -20,8 +20,25 @@ const GameBoard = (function (){
             }
         }
     }
+
+    const checkWin = function(player_symbol){
+        // Check for row win:
+        const row_win = board.reduce((accumulator, currentValue) => {
+            if (currentValue.join('') === `${player_symbol}`.repeat(board.length)){
+                return accumulator += false;
+            }
+
+            return accumulator += true;
+        }, 0);
+
+        if (row_win % 2 == 0){
+            return true;
+        }
+
+        return false;
+    }
     
-    return {getBoard, placePiece, resetBoard};
+    return {getBoard, placePiece, resetBoard, checkWin};
 }());
 
 
