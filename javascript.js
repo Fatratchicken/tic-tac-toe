@@ -135,7 +135,13 @@ const GamePlay = (function(){
         current_player.getInput(current_player.player_symbol);
 
         game_over = GameBoard.checkWin(current_player.player_symbol);
-    
+
+        game_board = GameBoard.getBoard();
+        
+        for (let i = 0; i < game_board.length; i++){
+            console.log(game_board[i]);
+        }
+
         // swap players: 
         player_turns = [player_turns.pop(), player_turns.shift()];
     }
