@@ -25,10 +25,10 @@ const GameBoard = (function (){
 }());
 
 
-//factory function for player:
+//factory function for creating player:
 const createPlayer = function(player_symbol){
     const getInput = () => {
-        let user_input = prompt('Enter an index:');
+        let user_input = prompt(`${player_symbol} Enter an index:`);
         user_input = user_input.split(',');
 
         GameBoard.placePiece(user_input[0], user_input[1], player_symbol);
@@ -38,13 +38,13 @@ const createPlayer = function(player_symbol){
     return {player_symbol, getInput};
 };
 
-//these use Player as their prototype:
+//these use createPlayer (player) as their prototype:
 const Player_x = (function() {
     const {player_symbol, getInput} = createPlayer('X');
     return {player_symbol, getInput};
 }());
 
-const Player_y = (function() {
-    const {player_symbol, getInput} = createPlayer('y');
+const Player_O = (function() {
+    const {player_symbol, getInput} = createPlayer('O');
     return {player_symbol, getInput};
 }());
