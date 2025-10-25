@@ -2,8 +2,8 @@
 
 const GameBoard = (function (){
     const board = [
-        ['','','O'],
-        ['','O',''],
+        ['O','',''],
+        ['','',''],
         ['O','','O']
     ];
 
@@ -58,6 +58,29 @@ const GameBoard = (function (){
         }
 
         if (cross_win()){
+            return true;
+        }
+
+        // column win: 
+        const column_win = function(){
+            for (let i = 0; i < board.length; i++){
+                let column_length = 0;
+                
+                for (let j = 0; j < board.length; j++){
+                    if (board[j][i] === player_symbol){
+                        column_length++;
+                    }
+                }
+
+                if (column_length === board.length){
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        if (column_win()){
             return true;
         }
 
