@@ -10,6 +10,10 @@ const GameBoard = (function (){
     const getBoard = () => board;
 
     const placePiece = function(index_x, index_y, player_symbol){
+        if (board[index_y][index_x] !== ''){
+            return 'Spot already taken!';
+        }
+        
         board[index_y][index_x] = player_symbol;
     }
 
@@ -96,8 +100,13 @@ const createPlayer = function(player_symbol){
         let user_input = prompt(`${player_symbol} Enter an index:`);
         user_input = user_input.split(',');
 
-        GameBoard.placePiece(user_input[0], user_input[1], player_symbol);
+        let placement = GameBoard.placePiece(user_input[0], user_input[1], player_symbol);
 
+        if (placement !== undefined){
+            alert(placement);
+
+            getInput();
+        }
     };
 
     return {player_symbol, getInput};
