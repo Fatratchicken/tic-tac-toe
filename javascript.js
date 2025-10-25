@@ -2,9 +2,9 @@
 
 const GameBoard = (function (){
     const board = [
-        ['O','',''],
         ['','',''],
-        ['O','','O']
+        ['','',''],
+        ['','','']
     ];
 
     const getBoard = () => board;
@@ -90,7 +90,6 @@ const GameBoard = (function (){
     return {getBoard, placePiece, resetBoard, checkWin};
 }());
 
-
 //factory function for creating player:
 const createPlayer = function(player_symbol){
     const getInput = () => {
@@ -113,4 +112,25 @@ const Player_x = (function() {
 const Player_O = (function() {
     const {player_symbol, getInput} = createPlayer('O');
     return {player_symbol, getInput};
+}());
+
+//IIFE factory function for gameplay:
+const GamePlay = (function(){
+    let game_over = false;
+
+    let player_turns = [Player_x, Player_O];
+
+    while(!game_over){
+        current_player = player_turns[0];
+
+        current_player.getInput(current_player.player_symbol);
+
+        game_over = GameBoard.checkWin(current_player.player_symbol);
+    
+        // swap players: 
+        player_turns = [player_turns.pop(), player_turns.shift()];
+    }
+
+    console.log(`Player ${player_turns[1].player_symbol} wins!`);
+
 }());
