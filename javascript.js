@@ -36,7 +36,7 @@ const GameBoard = (function (){
         }, 0);
 
         if (row_win % 2 == 0){
-            return true;
+            return [true, 'Row Win'];
         }
 
         //check for x cross win: 
@@ -62,7 +62,7 @@ const GameBoard = (function (){
         }
 
         if (cross_win()){
-            return true;
+            return [true, 'Cross Win'];
         }
 
         // column win: 
@@ -85,7 +85,7 @@ const GameBoard = (function (){
         }
 
         if (column_win()){
-            return true;
+            return [true, 'Column Win'];
         }
 
         // draw:
@@ -101,7 +101,11 @@ const GameBoard = (function (){
             return true;
         }
 
-        return false;
+        if (draw()){
+            return [true, 'Draw'];
+        }
+
+        return [false, ''];
     }
     
     return {getBoard, placePiece, resetBoard, checkWin};
@@ -179,12 +183,16 @@ const GamePlay = (function(){
 
         let player_turns = [Player_X, Player_O];
 
+        // for game draw: 
+        let game_status = '';
+
         while(!game_over){
             current_player = player_turns[0];
 
             current_player.getInput(current_player.player_symbol);
 
-            game_over = GameBoard.checkWin(current_player.player_symbol);
+            game_over = GameBoard.checkWin(current_player.player_symbol)[0];
+            game_status = GameBoard.checkWin(current_player.player_symbol)[1];
 
             game_board = GameBoard.getBoard();
             
@@ -194,6 +202,11 @@ const GamePlay = (function(){
 
             // swap players: 
             player_turns = [player_turns.pop(), player_turns.shift()];
+        }
+
+        if (game_status == 'Draw'){
+            console.log('Draw');
+            return;
         }
 
         console.log(`Player ${player_turns[1].player_symbol} wins!`);
