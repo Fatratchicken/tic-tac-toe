@@ -91,7 +91,7 @@ const GameBoard = (function (){
         // draw:
         const draw = function(){
             for(let i = 0; i < board.length; i++){
-                for (let j = 0; j < board.length, j++){
+                for (let j = 0; j < board.length; j++){
                     if (board[i][j] === ''){
                         return false;
                     }
@@ -126,7 +126,7 @@ const createPlayer = function(player_symbol){
 };
 
 //these use createPlayer (player) as their prototype:
-const Player_x = (function() {
+const Player_X = (function() {
     const {player_symbol, getInput} = createPlayer('X');
     return {player_symbol, getInput};
 }());
@@ -172,30 +172,35 @@ const DomElements = (function(){
 
 }());
 
-//function for gameplay:
-const gamePlay = function(){
-    let game_over = false;
+//IIFE function for gameplay:
+const GamePlay = (function(){
+    const consoleGame = function(){
+        let game_over = false;
 
-    let player_turns = [Player_x, Player_O];
+        let player_turns = [Player_X, Player_O];
 
-    while(!game_over){
-        current_player = player_turns[0];
+        while(!game_over){
+            current_player = player_turns[0];
 
-        current_player.getInput(current_player.player_symbol);
+            current_player.getInput(current_player.player_symbol);
 
-        game_over = GameBoard.checkWin(current_player.player_symbol);
+            game_over = GameBoard.checkWin(current_player.player_symbol);
 
-        game_board = GameBoard.getBoard();
-        
-        for (let i = 0; i < game_board.length; i++){
-            console.log(game_board[i]);
+            game_board = GameBoard.getBoard();
+            
+            for (let i = 0; i < game_board.length; i++){
+                console.log(game_board[i]);
+            }
+
+            // swap players: 
+            player_turns = [player_turns.pop(), player_turns.shift()];
         }
 
-        // swap players: 
-        player_turns = [player_turns.pop(), player_turns.shift()];
+        console.log(`Player ${player_turns[1].player_symbol} wins!`);
     }
 
-    console.log(`Player ${player_turns[1].player_symbol} wins!`);
+    return {consoleGame}
 
-};
+
+}());
 
