@@ -88,6 +88,19 @@ const GameBoard = (function (){
             return true;
         }
 
+        // draw:
+        const draw = function(){
+            for(let i = 0; i < board.length; i++){
+                for (let j = 0; j < board.length, j++){
+                    if (board[i][j] === ''){
+                        return false;
+                    }
+                }
+            }
+            
+            return true;
+        }
+
         return false;
     }
     
