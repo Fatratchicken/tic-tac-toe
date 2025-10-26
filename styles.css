@@ -1,0 +1,38 @@
+body{
+    display: flex;
+    height: 100vh;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+}
+
+#grid-container{
+    display: grid;
+    gap: 5px;
+
+    width: 800px;
+    aspect-ratio: 1/1;
+
+    background-color: grey;
+}
+
+.cell{
+    background-color: lightgrey;
+}
+
+.cell:hover{
+    background-color: lightgreen;
+}
+
+.clicked{
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background-color: lightblue;
+
+    font-size: 3em;
+}

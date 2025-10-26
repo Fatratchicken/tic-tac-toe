@@ -123,8 +123,45 @@ const Player_O = (function() {
     return {player_symbol, getInput};
 }());
 
-//IIFE factory function for gameplay:
-const GamePlay = (function(){
+
+const DomElements = (function(){
+    const length = GameBoard.getBoard().length;
+    const grid_container = document.getElementById('grid-container');
+
+    grid_container.style.gridTemplateColumns = '1fr 1fr 1fr';
+    grid_container.style.gridTemplateRows = '1fr 1fr 1fr';
+    
+    // create the grid
+    const createGrid = function(){
+        for (let i = 0; i < length; i++){
+            for (let j = 0; j < length; j++){
+                const new_cell = document.createElement('div');
+                new_cell.classList.add('cell');
+
+                grid_container.appendChild(new_cell);
+            }
+        }
+    }
+
+    const cellClick = function(player_symbol){
+        grid_container.addEventListener('click', (event) => {
+            const target = event.target;
+
+            console.log(1);
+
+            if (target.classList.contains('cell')){
+                target.classList.add('clicked');
+                target.textContent = player_symbol;
+            }
+        })
+    };
+
+    return {createGrid, cellClick};
+
+}());
+
+//function for gameplay:
+const gamePlay = function(){
     let game_over = false;
 
     let player_turns = [Player_x, Player_O];
@@ -148,4 +185,7 @@ const GamePlay = (function(){
 
     console.log(`Player ${player_turns[1].player_symbol} wins!`);
 
-}());
+};
+
+DomElements.createGrid();
+DomElements.cellClick('X');
