@@ -207,6 +207,7 @@ const GamePlay = (function(){
         }
 
         console.log(`Player ${player_turns[1].player_symbol} wins!`);
+        GameBoard.resetBoard();
     }
 
 
@@ -223,6 +224,10 @@ const GamePlay = (function(){
         DomElements.grid_container.addEventListener('click', (event) => {
             const target = event.target;
 
+            if (game_over){
+                return;
+            }
+
             if (target.classList.contains('cell')){
                 if (current_player.getInputDom(target.dataset.index.split(',')) === undefined){
                 // dom changes: 
@@ -235,6 +240,8 @@ const GamePlay = (function(){
 
                     [player_turns[0], player_turns[1]] = [player_turns[1], player_turns[0]];
                     current_player = player_turns[0];
+
+                    console.log(GameBoard.getBoard());
                 }
  
             }
