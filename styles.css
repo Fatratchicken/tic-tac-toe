@@ -41,3 +41,7 @@ body{
     font-size: 5em;
     font-weight: 900;
 }
+
+.red{
+    background-color: lightcoral;
+}

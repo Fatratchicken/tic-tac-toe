@@ -26,17 +26,33 @@ const GameBoard = (function (){
     }
 
     const checkWin = function(player_symbol){
-        // Check for row win:
-        const row_win = board.reduce((accumulator, currentValue) => {
-            if (currentValue.join('') === `${player_symbol}`.repeat(board.length)){
-                return accumulator += false;
+        let marked_indexes = [];
+
+        // array for indexes of possible win:
+        const array_row_indexes = function(row_num){
+            marked_indexes = [];
+
+            for (i = 0; i < board.length; i++){
+                marked_indexes.push([i, row_num]);
             }
 
-            return accumulator += true;
-        }, 0);
+            return marked_indexes;
+        }
 
-        if (row_win % 2 == 0){
-            return [true, 'Row Win'];
+        // Check for row win:
+        const row_win = function(){
+            for (let i = 0; i < board.length; i++){
+                if (board[i].join('') === `${player_symbol}`.repeat(board.length)){
+                    array_row_indexes(i);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        if (row_win()){
+            return [true, 'Row Win', marked_indexes];
         }
 
         //check for x cross win: 
@@ -169,7 +185,17 @@ const DomElements = (function(){
         }
     }
 
-    return {createGrid, grid_container};
+    const turnRed = function(index_arr){
+        const grid_cells = document.querySelectorAll('.cell');
+
+        for (let i = 0; i < index_arr.length; i++){
+            let one_dimensional_index = index_arr[i][1] * GameBoard.getBoard().length + index_arr[i][0];
+
+            grid_cells[one_dimensional_index].classList.add('red');
+        }
+    }
+
+    return {createGrid, turnRed, grid_container};
 
 }());
 
@@ -232,7 +258,9 @@ const GamePlay = (function(){
 
 
                     game_over = GameBoard.checkWin(current_player.player_symbol)[0];
-                    game_status = GameBoard.checkWin(current_player.player_symbol)[1];
+                    game_status = GameBoard.checkWin(current_player.player_symbol)[2];
+
+                    console.log(game_status);
 
                     [player_turns[0], player_turns[1]] = [player_turns[1], player_turns[0]];
                     current_player = player_turns[0];
@@ -240,6 +268,10 @@ const GamePlay = (function(){
                     console.log(GameBoard.getBoard());
                 }
  
+            }
+
+            if (game_over){
+                DomElements.turnRed(game_status);
             }
         }
         
