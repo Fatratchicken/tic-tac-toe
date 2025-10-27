@@ -162,7 +162,7 @@ const DomElements = (function(){
             for (let j = 0; j < length; j++){
                 const new_cell = document.createElement('div');
                 new_cell.classList.add('cell');
-                new_cell.dataset.index = `${[i, j]}`;
+                new_cell.dataset.index = `${[j, i]}`;
 
                 grid_container.appendChild(new_cell);
             }
