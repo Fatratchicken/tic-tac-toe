@@ -126,18 +126,26 @@ const createPlayer = function(player_symbol){
         }
     };
 
-    return {player_symbol, getInput};
+    const getInputDom = function(index){
+        let placement = GameBoard.placePiece(index[0], index[1], player_symbol);
+
+        if (placement != undefined){
+            return placement;
+        }
+    };
+
+    return {player_symbol, getInput, getInputDom};
 };
 
 //these use createPlayer (player) as their prototype:
 const Player_X = (function() {
-    const {player_symbol, getInput} = createPlayer('X');
-    return {player_symbol, getInput};
+    const {player_symbol, getInput, getInputDom} = createPlayer('X');
+    return {player_symbol, getInput, getInputDom};
 }());
 
 const Player_O = (function() {
-    const {player_symbol, getInput} = createPlayer('O');
-    return {player_symbol, getInput};
+    const {player_symbol, getInput, getInputDom} = createPlayer('O');
+    return {player_symbol, getInput, getInputDom};
 }());
 
 
@@ -161,18 +169,7 @@ const DomElements = (function(){
         }
     }
 
-    const cellClick = function(player_symbol){
-        grid_container.addEventListener('click', (event) => {
-            const target = event.target;
-
-            if (target.classList.contains('cell')){
-                target.classList.add('clicked');
-                target.textContent = player_symbol;
-            }
-        })
-    };
-
-    return {createGrid, cellClick};
+    return {createGrid, grid_container};
 
 }());
 
@@ -189,7 +186,7 @@ const GamePlay = (function(){
         while(!game_over){
             current_player = player_turns[0];
 
-            current_player.getInput(current_player.player_symbol);
+            current_player.getInput();
 
             game_over = GameBoard.checkWin(current_player.player_symbol)[0];
             game_status = GameBoard.checkWin(current_player.player_symbol)[1];
@@ -201,7 +198,7 @@ const GamePlay = (function(){
             }
 
             // swap players: 
-            player_turns = [player_turns.pop(), player_turns.shift()];
+            [player_turns[0], player_turns[1]] = [player_turns[1], player_turns[0]];
         }
 
         if (game_status == 'Draw'){
@@ -212,8 +209,44 @@ const GamePlay = (function(){
         console.log(`Player ${player_turns[1].player_symbol} wins!`);
     }
 
-    return {consoleGame}
+
+    const domGame = function(){
+        let game_over = false;
+        let player_turns = [Player_X, Player_O];
+        let current_player = player_turns[0];
+
+        // for game draw: 
+        let game_status = '';
+
+        DomElements.createGrid();
+        
+        DomElements.grid_container.addEventListener('click', (event) => {
+            const target = event.target;
+
+            if (target.classList.contains('cell')){
+                if (current_player.getInputDom(target.dataset.index.split(',')) === undefined){
+                // dom changes: 
+                    target.classList.add('clicked');
+                    target.textContent = current_player.player_symbol;
+
+
+                    game_over = GameBoard.checkWin(current_player.player_symbol)[0];
+                    game_status = GameBoard.checkWin(current_player.player_symbol)[1];
+
+                    [player_turns[0], player_turns[1]] = [player_turns[1], player_turns[0]];
+                    current_player = player_turns[0];
+                }
+ 
+            }
+        })
+
+
+    }
+
+    return {consoleGame, domGame};
 
 
 }());
+
+GamePlay.domGame();
 
