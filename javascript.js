@@ -28,12 +28,47 @@ const GameBoard = (function (){
     const checkWin = function(player_symbol){
         let marked_indexes = [];
 
-        // array for indexes of possible win:
-        const array_row_indexes = function(row_num){
+        //enum style object for win_typess
+        const Win_types = {
+            ROW: 'row',
+            CROSS_LEFT_RIGHT: 'cross_left_right',
+            CROSS_RIGHT_LEFT: 'cross_right_left',
+            COLUMN: 'column'
+        }
+
+        //function for array for indexes of possible win:
+        const array_row_indexes = function(constant, win_type){
             marked_indexes = [];
 
-            for (i = 0; i < board.length; i++){
-                marked_indexes.push([i, row_num]);
+            switch (win_type){
+                case Win_types.ROW:
+                    for (let i = 0; i < board.length; i++){
+                        marked_indexes.push([i, constant]);
+                    }
+
+                    break;
+
+                case Win_types.CROSS_LEFT_RIGHT:
+                    for (let i = 0; i < board.length; i++){
+                        marked_indexes.push([i,i]);
+                    }
+
+                    break;
+                
+                case Win_types.CROSS_RIGHT_LEFT:
+                    for (let i = 0; i < board.length; i++){
+                        marked_indexes.push([i, (board.length-1)- i]);   
+                    }
+
+                    break;
+
+                case Win_types.COLUMN:
+                    for (let i = 0; i<board.length; i++){
+                            marked_indexes.push([constant, i]);
+                    }
+
+                    break;
+
             }
 
             return marked_indexes;
@@ -43,7 +78,7 @@ const GameBoard = (function (){
         const row_win = function(){
             for (let i = 0; i < board.length; i++){
                 if (board[i].join('') === `${player_symbol}`.repeat(board.length)){
-                    array_row_indexes(i);
+                    array_row_indexes(i, Win_types.ROW);
                     return true;
                 }
             }
@@ -70,7 +105,13 @@ const GameBoard = (function (){
                 }
             }
 
-            if (cross_length_one === board.length || cross_length_two === board.length){
+            if (cross_length_one === board.length){
+                array_row_indexes('', Win_types.CROSS_LEFT_RIGHT);
+                return true;
+            }
+
+            if (cross_length_two === board.length){
+                array_row_indexes('', Win_types.CROSS_RIGHT_LEFT);
                 return true;
             }
 
@@ -78,7 +119,7 @@ const GameBoard = (function (){
         }
 
         if (cross_win()){
-            return [true, 'Cross Win'];
+            return [true, 'Cross Win', marked_indexes];
         }
 
         // column win: 
@@ -89,19 +130,21 @@ const GameBoard = (function (){
                 for (let j = 0; j < board.length; j++){
                     if (board[j][i] === player_symbol){
                         column_length++;
+
+                        if (column_length === board.length){
+                            array_row_indexes(i, Win_types.COLUMN);
+                            return true;
+                        }
                     }
                 }
 
-                if (column_length === board.length){
-                    return true;
-                }
             }
 
             return false;
         }
 
         if (column_win()){
-            return [true, 'Column Win'];
+            return [true, 'Column Win', marked_indexes];
         }
 
         // draw:
