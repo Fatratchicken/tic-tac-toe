@@ -220,15 +220,11 @@ const GamePlay = (function(){
         let game_status = '';
 
         DomElements.createGrid();
-        
-        DomElements.grid_container.addEventListener('click', (event) => {
+
+        const handleClick = function(event){
             const target = event.target;
 
-            if (game_over){
-                return;
-            }
-
-            if (target.classList.contains('cell')){
+            if (target.classList.contains('cell') && !game_over){
                 if (current_player.getInputDom(target.dataset.index.split(',')) === undefined){
                 // dom changes: 
                     target.classList.add('clicked');
@@ -245,8 +241,9 @@ const GamePlay = (function(){
                 }
  
             }
-        })
-
+        }
+        
+        DomElements.grid_container.addEventListener('click', (event) => handleClick(event));
 
     }
 
