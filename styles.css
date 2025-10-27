@@ -2,6 +2,8 @@ body{
     display: flex;
     height: 100vh;
 
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
     align-items: center;
     justify-content: center;
 
@@ -16,6 +18,8 @@ body{
     aspect-ratio: 1/1;
 
     background-color: grey;
+
+    color: white;
 }
 
 .cell{
