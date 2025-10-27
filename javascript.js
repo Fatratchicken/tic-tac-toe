@@ -238,7 +238,16 @@ const DomElements = (function(){
         }
     }
 
-    return {createGrid, turnRed, grid_container};
+    const turnGray = function(){
+        const grid_cells = document.querySelectorAll('.cell');
+
+        for (let i = 0; i < GameBoard.getBoard().length ** 2; i++){
+            grid_cells[i].classList.add('gray');
+        }
+        
+    }
+
+    return {createGrid, turnRed, turnGray, grid_container};
 
 }());
 
@@ -299,22 +308,28 @@ const GamePlay = (function(){
                     target.classList.add('clicked');
                     target.textContent = current_player.player_symbol;
 
+                    game_over_arr = GameBoard.checkWin(current_player.player_symbol);
 
-                    game_over = GameBoard.checkWin(current_player.player_symbol)[0];
-                    game_status = GameBoard.checkWin(current_player.player_symbol)[2];
-
-                    console.log(game_status);
+                    game_over = game_over_arr[0];
+                    game_status = game_over_arr[1];
+                    game_index = game_over_arr[2];
 
                     [player_turns[0], player_turns[1]] = [player_turns[1], player_turns[0]];
                     current_player = player_turns[0];
 
-                    console.log(GameBoard.getBoard());
                 }
  
             }
 
             if (game_over){
-                DomElements.turnRed(game_status);
+                if (game_status === 'Draw'){
+                    DomElements.turnGray();
+                }
+
+                else{
+                    DomElements.turnRed(game_index);
+                }
+
             }
         }
         
